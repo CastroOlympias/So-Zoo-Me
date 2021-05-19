@@ -43,7 +43,12 @@ function filterByQuery(query, animalsArray) {
   return filteredResults;
 }
 
-app.get('/api/animals', (req, res) => {
+function findById(id, animalsArray) {
+  const result = animalsArray.filter(animal => animal.id === id)[0];
+  return result;
+}
+
+app.get('/api/animals/', (req, res) => {
   let results = animals;
   console.log(req.query)
   if (req.query) {
@@ -52,9 +57,21 @@ app.get('/api/animals', (req, res) => {
   res.json(results);
 });
 
+app.get('/api/animals/:id', (req, res) => {
+  const result = findById(req.params.id, animals);
+  console.log(result)
+  if (result) {
+    res.json(result);
+  } else {
+    res.sendStatus(404);
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`API server now on port 3001!`);
 });
 
 
-//   localhost
+//   http://localhost:3001/
+// or in this case http://localhost:3001/api/animals
+// or http://localhost:3001/api/animals?personalityTraits=hungry&personalityTraits=zany
